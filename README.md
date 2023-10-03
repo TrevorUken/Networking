@@ -67,7 +67,7 @@ network scanning
   idle scan uses zombie IP, uses another person's IP (that ou have to specify  to do the scan
 
   find open ports with nmap then use netcat to verify
-      echo " ' | nc <ip> <port number>
+      echo " ' | nc -v <ip> <port number>
 
 
 
@@ -122,12 +122,16 @@ nc -l -p 9001 > newfile.txt
 client relay 
 -----------
 mknod mypipe p (or) mkfifo <name> 
-1
 
 listners 
 -------------
 nc -l -l 9002 < infile (sends info) 
 nc -l -p 9001 > outfile (recieves info) 
+
+
+tunneling
+______________________
+creates ssh, then tells what port to go through 
 
 send traffic
 -----------------
@@ -141,13 +145,29 @@ nc -l -p <port that was unfiltered> -vvv
 
 ssh local port forwarding
 -------------------------
+                                        (or host name) 
 ssh -p <optional alternate port> <user>@<ip> -L <myport>: target:<Target port> -NT 
 
-ex) ssh student@172.16.82.106 -L 1111:localhost:80 -NT
+ex) ssh student@172.16.82.106 -L 1111:localhost:80 -NT (a way to access a private web server this host only has access too. if its an active webserver) 
 
-ssh -D <port> -p <alt port> user@povit ip -NT
+ssh student@172.16.1.15 -L 1111:172.16.40.10:22
+ssh student@localhost -p 1111 -L 2222:172.16.82.106:80 
+
+        (9050)
+ssh -D <port> -p <alt port> user@povit ip -NT   (use a 3rd praty software to figure it out; proxychains) any tcp protocoal can  be used, only forwards tcp traffic 
+ex) ssh student@172.16.82.106 -D 9050 -nt 
+
+on my box) proxychains ./network (network scan) 
+          porxychains ssh student@<ip> -p
 
 
+proxychains curl ftp://www.onlineftp.ch
+proxychains wget -r www.espn.com
+proxychains ./network
+
+
+ss -ntlp (view ports on your loop back) ss -antp (established ports)
+------------------------------------------------------
 
 
 
