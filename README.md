@@ -165,16 +165,23 @@ proxychains curl ftp://www.onlineftp.ch
 proxychains wget -r www.espn.com
 proxychains ./network
 
+ssh student@10.10.0.40 -R 1111:localhost: 80 -nt (bypassing firewall to get traffic) 
 
 ss -ntlp (view ports on your loop back) ss -antp (established ports)
 ------------------------------------------------------
 
+search commands 
+----------------------
+find / -name hint* 2> /dev/null
+
+find / -name flag* 2> /dev/null
 
 
 
 
-
-
+hint on 10.50.44.211
+-----------------------
+You are on this workstation as Jose Cuervo, a local strongman. You have the ability to execute commands on this Pineland workstation as an actor for Pineland. Jose has a friend in Atropia that has provided him with the ability to SSH to the Allies' pivot point. You (Jose) should look into providing intel on other interesting workstations in the area controlled by Keith Mohammand, a wanted terrorist. Those workstations are not directly reachable from Atropia, but are on the same subnet as Jose's workstation which may be used to exfiltrate information. Jose also has a flag that can be found by using the find command on his system. The directory where the flag is found has been commonly used throughout the network.
 
 
 
