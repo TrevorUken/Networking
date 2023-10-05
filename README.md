@@ -187,14 +187,18 @@ You are on this workstation as Jose Cuervo, a local strongman. You have the abil
 
 
 
+ number 10 ssh 
+ --------------------------------------
+net4_comrade18
+privet18
 
 
-
-
-
-
-
-
+ssh net4_student18@localhost -p 41810 -L 41820:192.168.0.40:5555 -NT
+ ssh  net4_student18@localhost -p 41820 -L 41830:172.16.0.60:23 -NT
+ use telent
+ssh net4_student18@192.168.0.40 -p 5555 -R 41840:localhost:22 -NT
+ssh net4_student18@localhost -p 41820 -L 41850:localhost:41840 -NT
+ssh net4_comrade18@localhost -p 41850 -D 9050 -NT
 
 
 
