@@ -177,6 +177,88 @@ find / -name hint* 2> /dev/null
 find / -name flag* 2> /dev/null
 
 
+----------------------------------------------------------------------
+day ?)
+
+/etc/p0f/p0f.fp
+
+wireshark 
+---------------
+protocol high archy click as apply as filter
+
+tcpdump -r <file>
+tcpdump -r <file> tcp[13] = 0x02 | sort | uniq -c 
+
+sudo p0f -r wget.pcap -o /var/log/p0f.log 
+alert = log data 
+sensors = in-line, passive
+methods= tap, span, arp spoofing(MitM)
+
+IOA - passive 
+
+
+IOC - reactive 
+
+--------------------------------------------------------------
+
+day 6?)
+
+network traffic filtering 
+-----------------------------
+(firewalls)
+-----------
+host: ex) windows definder 
+network: on interfaces effecting the whole network
+proxy:  layer 3-7
+switch: layer 2/3 
+router: layer 3-4
+ids and ips: layer 3-7
+host baised firewall: 3-7
+
+whitelist: default is explicit deny 
+blacklist: default is explicit allow 
+
+network device modes: 
+routed (router) 
+transparent (copies and forwards it through) 
+firewall: stateless(onepacket L 3/4), statefull inspection(L4), application fkters(layer7)
+firewall: to block everything everythin going to the internal network 
+
+
+iptables: -A append -I insert at top  -L list -P change defult policy -p protocol -d dest addr -s src addr -j jump to target action -n port number vice -t specifies a specific filter 
+
+nft add table [family] [table] chain {type [type] hook [hook] priority [priority]\; policy [policy] \;}         Ex) 
+
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT (allows ssh through fire wall) 
+sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT(allows ssh out through the firewall) 
+sudo iptables -P INPUT DROP 
+sudo iptables -P OUTPUT DROP
+
+
+external interface: genaric rules on first firewall
+ids&ips: right at the exit of th external
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 hint on 10.50.44.211
@@ -185,7 +267,7 @@ You are on this workstation as Jose Cuervo, a local strongman. You have the abil
 
 
 
-
+The flag is the PDU for UDP at the transport layer.
 
  number 10 ssh 
  --------------------------------------
