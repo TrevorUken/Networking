@@ -233,11 +233,57 @@ sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT (allows ssh through fire wall
 sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT(allows ssh out through the firewall) 
 sudo iptables -P INPUT DROP 
 sudo iptables -P OUTPUT DROP
+sudo iptables -A INPUT -p tcp -m multiport --ports 22,23,80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp -m multiport --ports 22,23,80 -j ACCEPT
+
+
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 1.1.1.1:8080
+iptables -t nat -A PREROUTING -o eth0 -j DNAT --to 10.0.0.1:8080
+
+snat= post routing 
+dnat= pre routing output
+masquerade= post routing 
+
+
+
+NFT (ipv6 and ipv4) 
+----------------
+sudo nft add table ip CCTC 
+sudo nft add chain ip <same name> <chain name> { type filter hook input priority 0 \; policy accept\; } 
+
+sudo nft add rule ip <table name> <chain name> <protocal> <dport|sport> { ssh,telnet,http }
+sudo nft add rule ip <table name> <chain name> <protocal> <dport|sport> { ssh,telnet,http }
+
+
 
 
 external interface: genaric rules on first firewall
 ids&ips: right at the exit of th external
 
+----------------------------------------------------------------------------------------------------------------
+day 8) 
+
+IDS AND IPS
+--------------------------------------------
+snort
+----------
+action protocol (source ip ) (src port) (dst ip) (dst port) msg; reference; sid; rev; classtype; priority; metadata; content; |hex|; nocase; depth (how far); distance; within; offset;
+
+/etc/snort
+
+snort examples
+----------------------
+sudo snort -D -c /etc/snort/snort.conf -l /var/log/snort
+sudo snort -r <file> 
+
+(string)  aleart tcp any any -> any 21 (msg:"anonymous ftp login"; content: "anonymous"; sid: 123456;)
+(offset)  aleart tcp any any -> any 21 (msg:"anonymous ftp login"; content: "anonymous"; offset:5; sid:123456;)
+(ping sweep)  alert icmp any any -> 140.1.0.2 any (msg: "nmap"; dsize:0; sid:123456; rev: 1;) 
+(hex)  alert tcp any any -> any any (msg: "noOP"; content: "|9090 9090 9090|"; sid: 789456;)
+(bad telent login)  alert tcp anmy 23 -> any any (msg: "telent bad login"; content: "Login incorrect"; flow: established,from_server; classtype:bad-unknown; sid 741852; rev: 6; ) 
+
+
+alert tcp any any -> any any (msg: "check ping"; content: "IDSRulecheck"; sid: 123456;) 
 
 
 
@@ -256,6 +302,73 @@ ids&ips: right at the exit of th external
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+T2 & T4 
+----------------------------------
+sudo nft add table ip CCTC
+sudo nft add chain ip CCTC OUTPUT { type filter hook output priority 0 \; policy accept \;}
+sudo nft add rule CCTC INPUT ct state { established, new } tcp sport { ssh, telnet, 3389 } accept 
+sudo nft add rule CCTC INPUT ct state { established, new } tcp dport { ssh, telnet, 3389 } accept
+sudo nft add rule CCTC INPUT icmp type { echo-reply, echo-request } ip saddr { 10.10.0.40 } accept
+sudo nft add rule CCTC INPUT icmp type { echo-reply, echo-request } ip daddr { 10.10.0.40 } accept
+sudo nft add rule CCTC INPUT tcp sport { mmcc, 5150 } accept
+sudo nft add rule CCTC INPUT tcp dport { mmcc, 5150 } accept 
+sudo nft add rule CCTC INPUT udp sport { mmcc, 5150 } accept
+sudo nft add rule CCTC INPUT udp dport { mmcc, 5150 } accept
+sudo nft add rule CCTC INPUT tcp sport { 80 } accept
+sudo nft add rule CCTC INPUT tcp dport { 80 } accept
+
+
+
+
+
+
+T1 & T3 
+-----------------------------------
+sudo iptables -t filter -A INPUT -p tcp -m multiport --ports 22,23,3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -t filter -A INPUT -p tcp -m multiport --ports 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -t filter -A INPUT -p tcp -m multiport --ports  6579,4444 -j ACCEPT
+sudo iptables -t filter -A INPUT -p udp -m multiport --ports  6579,4444 -j ACCEPT
+sudo iptables -t filter -A INPUT -s 10.10.0.40 -p icmp --icmp-type echo-request -j ACCEPT
+sudo iptables -t filter -A INPUT -s 10.10.0.40 -p icmp --icmp-type echo-reply -j ACCEPT
+sudo iptables -t filter -A INPUT -d 10.10.0.40 -p icmp --icmp-type echo-request -j ACCEPT
+sudo iptables -t filter -A INPUT -d 10.10.0.40 -p icmp --icmp-type echo-reply -j ACCEPT
+
+
+sudo iptables -t filter -A OUTPUT -p tcp -m multiport --ports 22,23,3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -t filter -A OUTPUT -p tcp -m multiport --ports 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -t filter -A OUTPUT -p tcp -m multiport --ports  6579,4444 -j ACCEPT
+sudo iptables -t filter -A OUTPUT -p udp -m multiport --ports  6579,4444 -j ACCEPT
+sudo iptables -t filter -A OUTPUT -s 10.10.0.40 -p icmp --icmp-type echo-request -j ACCEPT
+sudo iptables -t filter -A OUTPUT -s 10.10.0.40 -p icmp --icmp-type echo-reply -j ACCEPT
+sudo iptables -t filter -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type echo-request -j ACCEPT
+sudo iptables -t filter -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type echo-reply -j ACCEPT
 
 
 
@@ -287,10 +400,71 @@ ssh net4_comrade18@localhost -p 41850 -D 9050 -NT
 
 
 
+sudo nft add rule NAT POSTROUTING ip saddr 192.168.3.30 oif eth0 masquerade
+
+
+hints for the capstone. 
+-----------------------
+/usr/share/cctc
+range 4180-41899
+
+
+Go through each of the 5 questions on this website and be prepared to write the answer at an alternate location.
+-------------------------------------------------------------------------------------------------------------------------
+
+1) APIPA uses the IP network range of 169.254.0.0/16. What RFC number governs this? Enter only the BASE64 conversion of the number.
+
+2) IPv6 Uses SLAAC to resolve its Global address from the Router. What multicast destination address does it use to Solicit the router? Enter the address in uppercase and convert to BASE64.
+
+3) which type of ARP is sent in order to perform a MitM attack? Specify the answer in ALL CAPS and convert to BASE64.
+
+4) An attacker built a FRAME that looks like this:
+
+| Destination MAC | Source MAC | 0x8100 | 1 | 0x8100 | 100 | 0x0800 | IPv4 Header | TCP Header | Data | FCS |
+
+  What form of attack is being performed? Supply your answer in ALL CAPS and convert to BASE64.
+
+5) A router receives a 5000 byte packet on eth0. The MTU for the outbound interface (eth1) is 1500. What would the fragmentation offset increment be with the conditions below?
+    Origional packet Size = 5000 bytes
+    MTU for outboud interface = 1500
+    Packet IHL = 7
+   Supply only the BASE64 conversion of the number.
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+pcap questions
+---------------
+To answer these 4 questions, you will need to use tcpdump and BPF's against the capstone-bpf.pcap file.
+
+
+Question 1:
+
+Using BPF’s, determine how many packets with a DSCP of 26 being sent to the host 10.0.0.103.
+
+Provide the number of packets converted to BASE64.
+
+
+Question 2:
+
+What is the total number of fragmented packets?
+
+Provide the number of packets converted to BASE64.
 
 
 
+Question 3:
 
+How many packets have the DF flag set and has ONLY the RST and FIN TCP Flags set?
+
+Provide the number of packets converted to BASE64.
+
+
+
+Question 4:
+
+An attacker is targeting the host 10.0.0.104 with either a TCP full or half open scan. Based off the pcap, how many ports are open?
+
+Provide the number of ports converted to BASE64.
 
 
 
