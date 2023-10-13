@@ -364,7 +364,7 @@ sudo nft add rule NAT POSTROUTING ip saddr 192.168.3.30 oif eth0 masquerade
 
 
 
-
+ scp net4_student18@192.168.10.101:/usr/share/cctc/capstone-analysis_HEX-ENCODED.pcap .
 
 
 
