@@ -285,47 +285,7 @@ sudo snort -r <file>
 
 alert tcp any any -> any any (msg: "check ping"; content: "IDSRulecheck"; sid: 123456;) 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+xxd ro decode hex
 
 
 
@@ -396,75 +356,14 @@ ssh net4_student18@localhost -p 41820 -L 41850:localhost:41840 -NT
 ssh net4_comrade18@localhost -p 41850 -D 9050 -NT
 
 
-
+tcpdump -XXvv 'tcp[0:2] = <portnumber>
 
 
 
 sudo nft add rule NAT POSTROUTING ip saddr 192.168.3.30 oif eth0 masquerade
 
 
-hints for the capstone. 
------------------------
-/usr/share/cctc
-range 4180-41899
 
-
-Go through each of the 5 questions on this website and be prepared to write the answer at an alternate location.
--------------------------------------------------------------------------------------------------------------------------
-
-1) APIPA uses the IP network range of 169.254.0.0/16. What RFC number governs this? Enter only the BASE64 conversion of the number.
-
-2) IPv6 Uses SLAAC to resolve its Global address from the Router. What multicast destination address does it use to Solicit the router? Enter the address in uppercase and convert to BASE64.
-
-3) which type of ARP is sent in order to perform a MitM attack? Specify the answer in ALL CAPS and convert to BASE64.
-
-4) An attacker built a FRAME that looks like this:
-
-| Destination MAC | Source MAC | 0x8100 | 1 | 0x8100 | 100 | 0x0800 | IPv4 Header | TCP Header | Data | FCS |
-
-  What form of attack is being performed? Supply your answer in ALL CAPS and convert to BASE64.
-
-5) A router receives a 5000 byte packet on eth0. The MTU for the outbound interface (eth1) is 1500. What would the fragmentation offset increment be with the conditions below?
-    Origional packet Size = 5000 bytes
-    MTU for outboud interface = 1500
-    Packet IHL = 7
-   Supply only the BASE64 conversion of the number.
-
-
---------------------------------------------------------------------------------------------------------------------------------
-pcap questions
----------------
-To answer these 4 questions, you will need to use tcpdump and BPF's against the capstone-bpf.pcap file.
-
-
-Question 1:
-
-Using BPF’s, determine how many packets with a DSCP of 26 being sent to the host 10.0.0.103.
-
-Provide the number of packets converted to BASE64.
-
-
-Question 2:
-
-What is the total number of fragmented packets?
-
-Provide the number of packets converted to BASE64.
-
-
-
-Question 3:
-
-How many packets have the DF flag set and has ONLY the RST and FIN TCP Flags set?
-
-Provide the number of packets converted to BASE64.
-
-
-
-Question 4:
-
-An attacker is targeting the host 10.0.0.104 with either a TCP full or half open scan. Based off the pcap, how many ports are open?
-
-Provide the number of ports converted to BASE64.
 
 
 
